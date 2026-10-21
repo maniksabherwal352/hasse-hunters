@@ -1,0 +1,24 @@
+/* responsive.css — tablet & mobile */
+@media (max-width:1020px){
+  .trial-grid{grid-template-columns:1fr}
+  .analysis-panel{position:static; max-height:none}
+  .room-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:640px){
+  .screen{padding:14px 10px 50px}
+  .room-grid{grid-template-columns:1fr}
+  .prop-grid{grid-template-columns:1fr}
+  .result-grid{grid-template-columns:1fr 1fr}
+  .btn{width:100%; padding:14px}
+  .btn.small{width:auto; padding:8px 12px}
+  .action-bar .btn{flex:1 1 45%}
+  .topbar{flex-direction:column; align-items:stretch}
+  .topbar-stats{justify-content:flex-start}
+  .home-actions .btn{width:100%}
+  .demo-grid{grid-template-columns:1fr}
+  .hasse-svg{min-height:320px}
+  .intro-lab{grid-template-columns:1fr}
+}
+@media (hover:none){
+  .chip,.btn,.seg button{min-height:44px}
+}

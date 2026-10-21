@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Poset Dungeon — Hasse Trials</title>
+<meta name="description" content="A dungeon puzzle game for Discrete Mathematics: relations, POSETs and Hasse diagrams.">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/dungeon.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+<div class="float-symbols" id="floatSymbols" aria-hidden="true"></div>
+
+<!-- ================= HOME ================= -->
+<section id="screen-home" class="screen active">
+  <div class="game-kicker">DISCRETE MATHEMATICS • RELATIONS &amp; POSETS</div>
+  <h1 class="game-title">THE POSET DUNGEON</h1>
+  <div class="game-sub">HASSE TRIALS</div>
+  <p class="tagline">"Where every path is a proof."</p>
+  <div class="story">
+    You have entered the <b>Poset Dungeon</b>, a forgotten mathematical fortress.<br>
+    Five chambers stand between you and the final gate.<br>
+    Only those who understand <span class="rune">relations, partial orders and Hasse diagrams</span> can escape.
+  </div>
+  <div class="home-actions">
+    <button class="btn gold" id="btnEnter">◈ ENTER THE DUNGEON</button>
+    <button class="btn" id="btnHow">HOW TO PLAY</button>
+    <button class="btn" id="btnGuide">MATHEMATICS GUIDE</button>
+    <button class="btn ghost" id="btnCredits">CREDITS</button>
+  </div>
+  <div class="home-meta">
+    <span>✦ 6 trials</span><span>🗝 6 keys</span><span>❤️ 3 lives per room</span>
+    <span>◈ Real math engine</span><span id="homeSave"></span>
+  </div>
+  <div class="home-actions" style="margin-top:14px">
+    <button class="btn small ghost" id="btnDemo">▶ DEMO MODE (5-min presentation)</button>
+    <button class="btn small ghost" id="btnTests">✓ RUN MATH TESTS</button>
+    <button class="btn small ghost hidden" id="btnContinue">↻ CONTINUE SAVED GAME</button>
+  </div>
+  <footer class="foot">Vanilla HTML • CSS • JS &nbsp;|&nbsp; SVG Hasse diagrams &nbsp;|&nbsp; No backend, no login</footer>
+</section>
+
+<!-- ================= MAP ================= -->
+<section id="screen-map" class="screen">
+  <div class="map-head">
+    <div>
+      <h2>🗺 THE DUNGEON MAP</h2>
+      <p>Conquer each chamber to earn its key. Keys unlock the rooms ahead.</p>
+    </div>
+    <div class="player-strip">
+      <span class="pill">✦ <b id="mapXp">0</b> XP</span>
+      <span class="pill" id="mapLives">❤️❤️❤️</span>
+      <span class="pill">🗝 <b id="mapKeys">0</b>/6</span>
+      <button class="btn small ghost" id="btnResetSave">Reset</button>
+      <button class="btn small ghost" id="btnHomeFromMap">⌂ Home</button>
+    </div>
+  </div>
+  <div class="progress"><i id="mapProgress"></i></div>
+  <section class="learning-map" aria-label="Poset learning map">
+    <div class="learning-map-title">POSET LEARNING MAP <span>Learn by rebuilding the structure</span></div>
+    <div id="mapLearning" class="learning-steps"></div>
+  </section>
+  <div class="room-grid" id="roomGrid"></div>
+  <div class="dungeon-banner" style="margin-top:18px">
+    <b class="rune">Dungeon rule:</b> <span style="color:var(--ink-dim)">wrong mathematical actions cost a life — but every mistake comes with a proof of <i>why</i>.</span>
+  </div>
+</section>
+
+<!-- ================= TRIAL ================= -->
+<section id="screen-trial" class="screen">
+  <div class="topbar" id="trialTopbar"></div>
+  <div class="dungeon-banner" id="trialLore"></div>
+  <div class="trial-grid">
+    <div class="challenge-card">
+      <div id="challengeArea"></div>
+      <div class="action-bar" id="trialActions"></div>
+      <div class="feedback" id="trialFeedback"></div>
+    </div>
+    <aside class="analysis-panel" id="analysisPanel" aria-live="polite"></aside>
+  </div>
+</section>
+
+<!-- ================= MODALS ================= -->
+<div class="modal" id="modal-how">
+  <div class="modal-box">
+    <h2>📜 HOW TO PLAY</h2>
+    <div class="guide-sec"><h3>❤️ Lives</h3><p>You enter every room with <b>3 lives</b>. A mathematically invalid submission costs <b>1 life</b> — but you always get a proof of what went wrong. Lose all 3 and the room resets with fresh lives.</p></div>
+    <div class="guide-sec"><h3>✦ XP &amp; 🗝 Keys</h3><p>First-attempt solve: <b>+100 XP</b>. After one hint: <b>+75</b>. After two hints: <b>+50</b>. Streaks add <b>+10</b>. Each conquered room grants a <b>key</b> that unlocks the next chamber.</p></div>
+    <div class="guide-sec"><h3>◈ Relation forge</h3><p>Rooms 1–2 are a <b>directed playground</b>: click one node then another to toggle an arrow, click a node twice for its loop ↺, click any arrow to remove it. Drag nodes anywhere. There are <b>no multiple-choice questions</b> — you manipulate the structure until the live lamps turn green.</p></div>
+    <div class="guide-sec"><h3>⬣ Hasse rules</h3><p>Draw <b>only cover relations</b>: no loops, no transitive edges. <b>Greater elements go higher.</b> Click one node then another to draw an edge; click an edge to remove it. Drag nodes to arrange them (they snap to their rank). <b>↺ undo / ↻ redo</b> are always available. The forge never lists the answer — it only tells you <i>what kind</i> of mismatch remains.</p></div>
+    <div class="guide-sec"><h3>💎 Diagram play</h3><p>Treasure hunts, peaks, crowns and bounds are all played <b>on the diagram itself</b>: tap glowing nodes to collect them. Fresh structures are generated every replay and difficulty adapts to you.</p></div>
+    <div class="guide-sec"><h3>👑 Final boss</h3><p>Type your own set and relation pairs. The engine analyzes it live. Then prove mastery <b>on your own diagram</b>: treasures, peaks, least/greatest crowns, LUB/GLB.</p></div>
+    <div class="guide-sec"><p class="hint-text">Guessing is not enough — every verdict is computed by the math engine and explained step by step.</p></div>
+    <div class="result-actions"><button class="btn gold" data-close="modal-how">Got it</button></div>
+  </div>
+</div>
+
+<div class="modal" id="modal-guide">
+  <div class="modal-box wide">
+    <h2>📐 MATHEMATICS GUIDE</h2>
+    <div id="guideBody"></div>
+    <div class="result-actions"><button class="btn gold" data-close="modal-guide">Close guide</button></div>
+  </div>
+</div>
+
+<div class="modal" id="modal-credits">
+  <div class="modal-box">
+    <h2>🏰 CREDITS</h2>
+    <p><b>THE POSET DUNGEON — HASSE TRIALS</b><br>College Discrete Mathematics ISE-2 project.<br>Unit: Relations, POSETs &amp; Functions.</p>
+    <p>Math engine: reflexive / symmetric / antisymmetric / transitive checks, partial-order detection, comparability, minimal–maximal, least–greatest, cover relations, Hasse validation — all computed client-side in vanilla JS.</p>
+    <p>Visualization: hand-built SVG (no chart libraries). Sound: tiny WebAudio blips, mutable.</p>
+    <div class="result-actions"><button class="btn gold" data-close="modal-credits">Close</button></div>
+  </div>
+</div>
+
+<div class="modal" id="modal-hint">
+  <div class="modal-box">
+    <h2>💡 HINT <span id="hintCost" class="hint-text"></span></h2>
+    <p id="hintBody" style="line-height:1.6"></p>
+    <div class="result-actions"><button class="btn gold" data-close="modal-hint">Understood</button></div>
+  </div>
+</div>
+
+<div class="modal" id="modal-result">
+  <div class="modal-box">
+    <div id="resultBody"></div>
+  </div>
+</div>
+
+<div class="modal" id="modal-demo">
+  <div class="modal-box">
+    <h2>▶ DEMO MODE</h2>
+    <p style="color:var(--ink-dim)">Five-minute presentation path. Each button jumps straight to a scripted moment:</p>
+    <div class="demo-grid">
+      <button class="btn small" data-demo="t1">1 · Forge Bay</button>
+      <button class="btn small" data-demo="wrong">2 · Restore Hall</button>
+      <button class="btn small" data-demo="forge">3 · Hasse Forge</button>
+      <button class="btn small" data-demo="invalid">4 · Invalid edge proof</button>
+      <button class="btn small" data-demo="repair">5 · Repair room</button>
+      <button class="btn small" data-demo="boss">6 · Final boss arena</button>
+    </div>
+    <div class="result-actions" style="margin-top:14px"><button class="btn ghost" data-close="modal-demo">Close</button></div>
+  </div>
+</div>
+
+<div class="modal" id="modal-tests">
+  <div class="modal-box wide">
+    <h2>✓ MATH ENGINE TESTS</h2>
+    <div id="testBody" class="pairs">Press RUN to execute the math-engine unit tests (core properties + Hasse covers + LUB/GLB).</div>
+    <div class="result-actions" style="margin-top:14px">
+      <button class="btn gold" id="btnRunTests">RUN TESTS</button>
+      <button class="btn ghost" data-close="modal-tests">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal-victory">
+  <div class="modal-box">
+    <div id="victoryBody"></div>
+  </div>
+</div>
+
+<div id="toastBox"></div>
+
+<script src="js/relation.js"></script>
+<script src="js/poset.js"></script>
+<script src="js/hasse.js"></script>
+<script src="js/levels.js"></script>
+<script src="js/challenges.js"></script>
+<script src="js/generator.js"></script>
+<script src="js/game.js"></script>
+<script src="js/renderer.js"></script>
+<script src="js/relation-forge.js"></script>
+<script src="js/ui.js"></script>
+<script src="tests/poset-tests.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

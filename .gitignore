@@ -1,0 +1,10 @@
+# Temporary captures and generated report files
+tmp/
+output/
+
+# Editor and operating-system files
+.vscode/
+.idea/
+*.log
+.DS_Store
+Thumbs.db

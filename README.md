@@ -158,10 +158,10 @@ Covers: identity POSET · divisibility POSET + exact covers · missing reflexive
 
 | Member | Contribution |
 |---|---|
-| _Name 1_ | Math engine (`relation.js`, `poset.js`, `hasse.js`) + unit tests |
-| _Name 2_ | Hasse SVG renderer + Trials 3/4 |
-| _Name 3_ | Trials 1/2/5, Final Boss, generators |
-| _Name 4_ | UI/CSS, map/progression, guide, README, presentation |
+| _Manik Sabherwal_ | Math engine (`relation.js`, `poset.js`, `hasse.js`) + unit tests |
+| _Chaitanya Chavan_ | Hasse SVG renderer + Trials 3/4 |
+| _Ayush Raina_ | Trials 1/2/5, Final Boss, generators |
+| _Aditi Srivastava_ | UI/CSS, map/progression, guide, README, presentation |
 
 *(Replace with actual names/roles.)*
 
